@@ -15,6 +15,10 @@ type: page
 
 * [Elasticsearch 2.3.3 JAVA api说明文档](https://www.blog-china.cn/template/documentHtml/1484101683485.html)
 
+### guava
+
+* [Google Guava官方教程](http://ifeve.com/google-guava/)
+
 ## 工具
 
 * [box-shadow generator](http://www.cssmatic.com/box-shadow)
