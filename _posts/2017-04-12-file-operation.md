@@ -26,7 +26,7 @@ author: gaos
 > * `boolean FileUtils.deleteQuietly(File file)`
 这个方法永远不会抛出异常，若File对象不存在，则删除失败，返回false；若File对象表示文件夹，则会递归删除。那么它与`File.delete()`方法有什么区别呢?
 其一:File.delete()删除文件夹时，要求其是`空文件夹`。
-其二:删除文件或文件夹失败时，不会抛出异常。
+其二:File.delete()删除文件或文件夹失败时(不包括资源不存在)，不会抛出异常。
 
 所以结合考虑，不管其是否存在，先删掉此文件，再创建此文件
 ```java
