@@ -19,6 +19,10 @@ type: page
 
 * [Google Guava官方教程](http://ifeve.com/google-guava/)
 
+### jquery
+
+* [jQuery源码分析（版本1.6.1）](http://www.cnblogs.com/nuysoft/archive/2011/11/14/2248023.html)
+
 ## 工具
 
 * [box-shadow generator](http://www.cssmatic.com/box-shadow)
