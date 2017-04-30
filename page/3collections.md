@@ -15,6 +15,8 @@ type: page
 
 * [Elasticsearch 2.3.3 JAVA api说明文档](https://www.blog-china.cn/template/documentHtml/1484101683485.html)
 
+* [Elasticsearch权威指南中文版](https://www.elastic.co/guide/cn/elasticsearch/guide/current/index.html)
+
 ### guava
 
 * [Google Guava官方教程](http://ifeve.com/google-guava/)
