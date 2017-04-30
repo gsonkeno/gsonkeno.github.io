@@ -742,7 +742,7 @@ curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -
 因为，`keyword`类型的字符串不会进行解析，编入索引时就是`A12345`，进行前缀查询时也不会对输入的字符串进行解析。
 
 ### 5.11 通配符查询(Wildcard Query)
-通配符查询与词条查询非常相似，只不过可以进行模糊匹配，主要是`?`和`*`两个通配符，前者代表一个字符，后者代表若干个字符(包含0个)。
+- 通配符查询与词条查询非常相似，只不过可以进行模糊匹配，主要是`?`和`*`两个通配符，前者代表一个字符，后者代表若干个字符(包含0个)。
 ```
 curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -d'
 {
@@ -752,7 +752,6 @@ curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -
 }
 '
 ```
-
 搜索时输入的内容不会被分析，文档中的内容已经被分词成若干个词条，其实是拿输入内容和文档特定字段的若干词条进行通配符匹配查询，切记不是与文档特定字段的整个内容进行通配符查询。(除非你的这个字段没有被分词`analyze`,纯理解，待验证)
 
 - 验证
