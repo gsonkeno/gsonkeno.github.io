@@ -652,6 +652,14 @@ curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -
 }
 '
 ```
+- 一个简单的示例
+![](http://images2015.cnblogs.com/blog/822071/201704/822071-20170430234355037-1116782641.jpg)
+`test_index`索引有一个字段`name`,它的类型是`text`,且设置了额外参数`analyzer:ik_max_word`,表示索引文档时按ik分词器的细颗粒模式进行分析，测试时一共索引了`7`个文档，是`中国`,`日本`,`美国`三个词的各种组合，如果你的数学基础还不错的话，立马就能想到共有七种组合。
+
+  图中按照`中国`进行`query_string`检索时，会发现`name`字段包含`中国`的文档全被检索出来，应为文档的`name`字段在索引时，已经将分词结果中的一个词条`中国`写入了倒排索引，而输入的`中国`也会进行解析，解析结果还是词条`中国`,所以匹配结果就是这样。
+  
+  继续看，如果你拿`中国美国`对`name`字段进行`query_string`查询时，结果如下:![](http://images2015.cnblogs.com/blog/822071/201704/822071-20170430235509287-1866289000.jpg)
+  分析与上面描述的一样，你使用`中国美国`进行`query_string`查询，那么name字段分词结果有`中国或美国`的文档则满足匹配，因为elasticsearch在`query_string`查询方式的情况下，默认操作模式就是`或`匹配，当然你可以通过设置额外参数`default_operator:AND`进行`与`匹配。
 
 ### 5.6 简单字符串查询(Simple Query String Query)
 
