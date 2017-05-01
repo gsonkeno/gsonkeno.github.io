@@ -560,9 +560,11 @@ curl -XGET 'localhost:9200/my_index/_search?pretty' -H 'Content-Type: applicatio
 该参数定义了的分析器，用于处理发送到特定字段的那部分查询字符串。
 
 ### 4.10 fielddata
-该参数是对于聚合分析非常有必要，对于`text`类型的字段，`fielddata`映射参数的默认值是default，这表示此字段是不可聚合分析的，如果你需要`text`字段能够聚合分析，请设置 `fielddata:true`
+该参数是对于聚合分析非常有必要，对于`text`类型的字段，`fielddata`映射参数的默认值是default，这表示此字段是不可聚合分析的，如果你需要`text`字段能够聚合分析，请设置 `"fielddata":true`
 
-另外，大部分类型的字段默认是支持聚合分析的。
+### 4.11 doc_values
+对于非字符串类型的字段，即排除可被分词的类型`text`,它们大多有一个额外参数:`doc_values`默认值是true，表示可进行聚合分析，对于`text`类型的字段若想使用聚合分析，参考`4.10`,另外文末的链接中[elasticsearch中的doc_values](http://www.360doc.com/content/16/0524/15/29098895_561912097.shtml)对于doc_values，fielddata，倒排索引，列式存储分析做了比较详细的解释，可以参阅。
+
 
 ## 5 Query DSL
 
