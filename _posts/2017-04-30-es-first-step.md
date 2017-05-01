@@ -563,9 +563,10 @@ curl -XGET 'localhost:9200/my_index/_search?pretty' -H 'Content-Type: applicatio
 该参数是对于聚合分析非常有必要，对于`text`类型的字段，`fielddata`映射参数的默认值是default，这表示此字段是不可聚合分析的，如果你需要`text`字段能够聚合分析，请设置 `fielddata:true`
 
 另外，大部分类型的字段默认是支持聚合分析的。
+
 ## 5 Query DSL
 
-### 5.1查询和过滤
+### 5.1 查询和过滤
 
 - 查询上下文(query context)
 查询上下文中的查询字句`query clause`描述的是检索时文档匹配相关度
@@ -596,19 +597,21 @@ curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -
 ③The `filter` parameter indicates `filter context`.
 ④The `term` and `range` clauses are used in filter context. They will filter out documents which do not match, but they will not affect the score for matching documents.
 
-### 5.2 全匹配(match_all)
-最简单的匹配方式，会匹配所有的文档，且会使相关性分数`_score`为1。明显，它属于query,而不是filter。
+### 5.2 match_all 查询
+最简单的匹配方式，会匹配索引中所有的文档，且会使匹配的文档相关性分数`_score`为1。当然，你可以通过设置额外参数`"boost":2`来改变得分，这里所有文档都有2.0的加权。明显，它属于query,而不是filter。
 ```
 curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -d'
 {
     "query": {
-        "match_all": {}
+        "match_all": {
+            "boost":2.0
+        }
     }
 }
 '
 ```
-### 5.3 全文匹配(match)
-match查询是最常用的一种全文检索方式，它可以将全文字段`full text`进行分析`analysis `,得到一个词条`term`列表，构成布尔`bool`查询。
+### 5.3 match 查询
+match查询会将query参数中的值拿出来，进行分析，然后构建相应的查询。`match查询不支持lucence查询语法`
 ```
 curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -d'
 {
@@ -620,10 +623,15 @@ curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -
 }
 '
 ```
+上面的示例中，`message`字段中包含this,is,a或test的词条，它所在的文档将会被检索出来。
 
-### 5.4 多全文匹配(multi match)
+额外参数:
 
-这是一种对多个字段做相同查询单的手段。
+- operator: or或者and，表示query参数中拿出的值进行分析而得的词条是全匹配还是只要有一个匹配即可。默认值or。
+
+### 5.4 multi match 查询
+
+与match类似，这是一种对多个字段做相同查询的手段。
 ```
 curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -d'
 {
@@ -635,11 +643,11 @@ curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -
   }
 }
 '
-// fields中只要有一个字段满足匹配，就会返回该条记录
 ```
+文档的`subject`字段或`message`字段只要有一个字段满足match匹配，则该文档满足查询。
 
-### 5.5 字符串查询(Query String Query)
-字符串查询`String Query`会将查询语句进行分析`analysis`
+### 5.5 String Query 查询
+字符串查询`String Query`会将查询语句进行分析`analysis`，与match查询类似，但是不同的是它支持全部的`lucence`查询语法。
 ```
 curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -d'
 {
@@ -660,8 +668,8 @@ curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -
   
   继续看，如果你拿`中国美国`对`name`字段进行`query_string`查询时，结果如下:![](http://images2015.cnblogs.com/blog/822071/201704/822071-20170430235509287-1866289000.jpg)
   分析与上面描述的一样，你使用`中国美国`进行`query_string`查询，那么name字段分词结果有`中国或美国`的文档则满足匹配，因为elasticsearch在`query_string`查询方式的情况下，默认操作模式就是`或`匹配，当然你可以通过设置额外参数`default_operator:AND`进行`与`匹配。
-
-### 5.6 简单字符串查询(Simple Query String Query)
+  
+### 5.6 Simple String Query 查询
 
 它与字符串查询`String Query`类似，不过它不会抛出异常，它会丢弃那些无效的部分。
 ```
@@ -679,8 +687,8 @@ curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -
 '
 
 ```
-### 5.7 词条查询(term)
-词条查询`term`不会去对搜索时输入的内容做分析`analyze`,只会匹配给定字段中`含有`该`词条`的文档。请注意，`text`类型的字段是会被分析的，这意味着它们的值第一步会被默认分词器`default`分析，产生若干词条；第二步这些词条会被`转化为小写`写入倒排索引。这就表示你如果插入一个包含title字段值为China的文档时，因为它写入索引时变成了china,所以你用`term`查询China时，是不会有结果的。
+### 5.7 term 查询
+词条查询`term`不会去对搜索时输入的内容做分析`analyze`,只会匹配给定字段中`含有该查询内容`的文档。请注意，`text`类型的字段是会被分析的，这意味着它们的值第一步会被默认分词器`default`分析，产生若干词条；第二步这些词条会被`转化为小写`写入倒排索引。这就表示你如果插入一个包含title字段值为China的文档时，因为它写入索引时变成了china,所以你用`term`查询China时，是不会有结果的。
 ```
 curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -d'
 {
@@ -706,10 +714,24 @@ curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -
 }
 '
 ```
-### 5.8 多词条查询(terms)
-与词条查询`term`类似，允许匹配在那些内容中含有某些词条的文档，这个某些默认是一条文档即可，你可以设置`minimum_match`来决定至少包含几个词条。
+### 5.8 terms 查询
+与词条查询`term`类似，允许匹配在那些在某字段含有某些词条的文档，这个某些默认是一条，你可以设置`minimum_match`来决定至少包含几个词条。
+```
+curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -d'
+{
+    "query": {
+        "constant_score" : {
+            "filter" : {
+                "terms" : { "user" : ["kimchy", "elasticsearch"]}
+            }
+        }
+    }
+}
+'
+```
+user字段包含`kimchy`词条或者`elasticsearch`词条的文档将满足匹配。
 
-### 5.9 范围查询(range)
+### 5.9 range 查询
 范围查询针对单字段，字段可以是字符串的，也可以是数字的，这都会映射到`lucence`进行查询。
 ```
 curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -d'
@@ -726,7 +748,8 @@ curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -
 }
 '
 ```
-### 5.10 前缀查询(prefix Query)
+
+### 5.10 prefix 查询
 匹配特定的字段以给定的前缀开始的文档
 ```
 curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -d'
@@ -741,7 +764,7 @@ curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -
 
 因为，`keyword`类型的字符串不会进行解析，编入索引时就是`A12345`，进行前缀查询时也不会对输入的字符串进行解析。
 
-### 5.11 通配符查询(Wildcard Query)
+### 5.11 Wildcard 查询
 - 通配符查询与词条查询非常相似，只不过可以进行模糊匹配，主要是`?`和`*`两个通配符，前者代表一个字符，后者代表若干个字符(包含0个)。
 ```
 curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -d'
@@ -761,7 +784,7 @@ curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -
   
   这两张截图正好验证了?与*的区别，由于美国?匹配的词条，必须是美国再加一个字组成的长度为3的词条，在已有文档中，没有与之匹配的文档。
   
-### 5.12 模糊查询(Fuzzy Query)
+### 5.12 Fuzzy 查询
 模糊查询基于`距离算法`,能够查询指定距离内的相似文档。
 ```
 curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -d'
@@ -800,8 +823,7 @@ curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -
 - `max_expansions`(最大扩展度)
 意思就是如果你的文档某个`text`类型的字段内容太长，可以分词成很多很多个词条，那么就有必要做下限制了，超过一定数量的词条就不会再做模糊匹配了，`max_expansions `正是做这个工作的，它的`默认值是50`
 
-
-### 5.13 常量评分查询(Constant Score Query)
+### 5.13 Constant Score 查询
 此`复合查询`允许一个查询`query`包裹一个查询`query`或`filter`,匹配的文档相关性得分全设为常量。
 ```
 curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -d'
@@ -818,10 +840,10 @@ curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -
 '
 ```
 
-### 5.14 布尔查询(Bool Query)
+### 5.14 Bool 查询
 布尔查询可以算是`复合查询`中最重要，最常见的查询方式了。每个布尔查询右若干个`布尔子句`组成，每个布尔子句都有其类型，类型共有`must`,`must not`,`should`,`filter`四种
 
-### 5.15 加权查询(Boosting Query)
+### 5.15 Boosting 查询
 此`复合查询`使用不多，包含三个重要要素，`positive`部分，包含所返回文档`得分不会被改变`的查询；`negative`部分，返回的文档`得分被降低`;`negative_boost`部分，包含用来降低negative部分查询得分的加权值。
 ```
 curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -d'
@@ -845,6 +867,7 @@ curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -
 '
 ```
 查询出来的文档`field`值必须包含`value1`,另外如果文档的`field2`值也包含`value2`,则该文档的得分变为0.2，其他的文档得分不变。
+
 
 ## 6 集群管理
 ### 6.1 集群健康度
