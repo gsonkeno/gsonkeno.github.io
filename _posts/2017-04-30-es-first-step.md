@@ -880,3 +880,4 @@ curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -
 - [ElasticSearch的_all域](http://blog.csdn.net/quicknet/article/details/29341159)
 - [csdn中的es文章系列1](http://blog.csdn.net/dm_vincent/article/category/2718099)
 - [csdn中的es文章系列2](http://blog.csdn.net/yangwenbo214/article/category/6602335)
+- [elasticsearch中的doc_values](http://www.360doc.com/content/16/0524/15/29098895_561912097.shtml)
