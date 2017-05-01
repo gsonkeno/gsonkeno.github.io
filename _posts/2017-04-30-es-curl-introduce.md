@@ -9,7 +9,7 @@ author: gaos
 * content
 {:toc}
 
-curl可以用来模拟http请求，最初使用到它，就是在学习elasticsearch的过程中使用curl命令向服务端发送请求，本文将对在elasticsearch中常用的curl命令做个简单笔记积累。
+curl可以用来模拟http请求，最初使用到它，就是在学习elasticsearch的过程中使用curl命令向服务端发送请求。另外google浏览器支持一款curl请求的浏览器插件`sense`,在windows平台下操作比较方便，且有智能提示，比较友好；另外head插件是一款可视化插件，功能也是非常强大。本文只对在elasticsearch中常用的curl命令做个简单笔记积累，使用其他工具稍加修改即可。
 
 
 
