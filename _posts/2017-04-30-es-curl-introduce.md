@@ -87,6 +87,7 @@ curl -XDELETE 'localhost:9200/my_index?pretty'
 ```
 curl -XPOST  "http://localhost:9200/my_index/_analyze?analyzer=ik_max_word&pretty=true&text=我是中国人" 
 ```
+对于elasticsearch的默认分词器`standard_analyzer`来讲，会将中文汉字一个一个切分开来，这对于中国用户是不友好的，ik分词器可以有效的避免这一点。
 ## 7.参考
 - [官网elasticsearch指引文档](https://www.elastic.co/guide/en/elasticsearch/reference/5.3/index.html)
 - [官网elasticsearch的java-api文档](https://www.elastic.co/guide/en/elasticsearch/client/java-api/current/index.html)
