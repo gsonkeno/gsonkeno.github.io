@@ -15,9 +15,10 @@ author: gaos
 
 
 ## head插件下载后要改动什么吗？
-    在参考中的前两篇文章中有提到要<font color='#ff0000'>更改服务器监听地址(通过head/Gruntfile.js文件)</font>，也有提到<font color='#ff0000'>要修改连接地址(通过head/_site/app.js)</font>
 
-    但就目前的实践结果来看，不需要改动什么文件，
+在参考中的前两篇文章中有提到要<font color="#ff0000">更改服务器监听地址(通过head/Gruntfile.js文件)</font>，也有提到<font color="#ff0000">要修改连接地址(通过head/_site/app.js)</font>
+
+但就目前的实践结果来看，不需要改动什么文件，
 
 
 
