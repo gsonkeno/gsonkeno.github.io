@@ -16,6 +16,7 @@ kafka入门学习笔记
 
 ## 安装部署
 1.下载kafka并解压。
+
 2.修改config/server.properties配置
 
 ① broker.id =0
