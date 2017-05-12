@@ -53,7 +53,8 @@ netstat -tunlp|egrep "(2181|9092)"
 
 ---
 
-运行consumer                         
+运行consumer  
+                       
 ```bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic test --from-beginning```
 
 在producer端输入字符串并回车，查看consumer端是否显示。 
