@@ -41,7 +41,11 @@ zookeeper集群的地址，可以是多个，多个之间用逗号分割 hostnam
 		
 ⑥ 检测2181与9092端口
 
-netstat -tunlp|egrep "(2181|9092)"
+```
+netstat -apn|grep 2181
+netstat -apn|grep 9092
+
+```
         
 ⑦ 单机连通性测试
 
