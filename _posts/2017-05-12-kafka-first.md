@@ -117,6 +117,7 @@ bin/kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list 192.168.10.1:909
 bin\windows\kafka-run-class.bat kafka.tools.GetOffsetShell --broker-list 192.168.10.1:9092 -topic test --time -2 //查询test主题最小offset
 bin\windows\kafka-run-class.bat kafka.tools.GetOffsetShell --broker-list 192.168.10.1:9092 -topic test --time -1 //查询test主题最大offset
 ```
+
 ![示例结果](http://images2015.cnblogs.com/blog/822071/201705/822071-20170521104935885-1822001346.jpg)
 结果中，第一列是主题，第二列是分区号，第三列是偏移量
 ### 删除主题
