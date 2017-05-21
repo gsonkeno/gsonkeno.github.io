@@ -2,7 +2,7 @@
 layout: post
 title:  "kafka入门学习"
 categories: Java
-tags:  java kafka linux
+tags:  java kafka linux apache
 author: gaos
 ---
 
