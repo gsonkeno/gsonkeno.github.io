@@ -104,7 +104,8 @@ bin/kafka-console-consumer.sh --bootstrap-server 192.168.10.1:9092 --from-beginn
 - windows
 ```
 bin\windows\kafka-console-consumer.bat --bootstrap-server 192.168.10.1:9092 --from-beginning --topic my-replicated-topic
-```
+```\
+
 ### 查询topic的offset的范围
 - linux
 ```
@@ -161,14 +162,15 @@ Leader会跟踪与其保持同步的Replica列表，该列表称为ISR（即in-s
 
 如果一个Follower宕机，或者落后太多，Leader将把它从ISR中移除。这里所描述的“落后太多”指Follower复制的消息落后于Leader后的条数超过预定值（该值可在`$KAFKA_HOME/config/server.properties中通过replica.lag.max.messages`配置，其默认值是`4000`）或者Follower超过一定时间（该值可在`$KAFKA_HOME/config/server.properties中通过replica.lag.time.max.ms`来配置，其默认值是`10000`）未向Leader发送fetch请求。
 
-详见[参考文档6](#reference)
+详见参考文档6
 
 ### 消息有序性
 kafka只能保证一个partition中的消息被某个consumer消费时,消息是顺序的.事实上,从Topic角度来说,消息仍不是有序的。
 
 ### __consumer_offsets
 由于Zookeeper并不适合大批量的频繁写入操作，新版Kafka已推荐将consumer的位移信息保存在Kafka内部的topic中，即`__consumer_offsets` topic，并且默认提供了kafka_consumer_groups.sh脚本供用户查看consumer信息。
-详见[参考文档7](#reference)
+
+详见参考文档7
 
 ### java api
 可以参考:
