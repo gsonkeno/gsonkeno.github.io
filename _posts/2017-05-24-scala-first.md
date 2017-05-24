@@ -298,6 +298,7 @@ object Test {
 ```
 
 ## scala迭代器
+
 **Scala Iterator（迭代器）不是一个集合，它是一种用于访问集合的方法。**
 
 **迭代器 it 的两个基本操作是 next 和 hasNext。**
