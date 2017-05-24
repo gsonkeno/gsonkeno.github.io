@@ -293,7 +293,6 @@ object Test {
       println("连接后的字符串为: " + t.toString() )
    }
 }
-
 ```
 
 ## scala迭代器
