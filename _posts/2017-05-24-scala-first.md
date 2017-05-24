@@ -44,6 +44,37 @@ import java.awt.{Color, Font} //引用包内的几个成员
 >val c : String = "hello"
 >val c : String //声明常量不一定需要初始值 
 
+## for循环
+while循环和dowhile循环这里不做介绍。这里主要介绍for循环,for循环最基础的知识点是`to语法和until语法`。前者包含遍历的最后一个值，后者不包括。后面要说的有:
+
+1. 在 for 循环中你可以使用分号(;)来设置多个区间，它将迭代给定区间所有的可能值
+```
+object Test {
+   def main(args: Array[String]) {
+      var a = 0;
+      var b = 0;
+      // for 循环
+      for( a <- 1 to 3; b <- 1 to 3){
+         println( "Value of a: " + a );
+         println( "Value of b: " + b );
+      }
+   }
+}
+```
+2. for循环过滤
+```
+for( var x <- List
+      if condition1; if condition2...
+   ){
+   statement(s);
+```
+3. for yield循环返回值作为变量存储
+```
+var retVal = for{ var x <- List
+     if condition1; if condition2...
+}yield x
+```
+
 ## scala函数
 - 函数声明
 ```
@@ -383,6 +414,7 @@ class Location(override val xc: Int, override val yc: Int,
 在 Scala 中，是没有 static 这个东西的，但是它也为我们提供了单例模式的实现方法，那就是使用`关键字 object`。
 Scala 中使用单例模式时，除了定义的类之外，还要定义一个同名的 object 对象，它和类的区别是，object对象不能带参数。
 当单例对象与某个类共享同一个名称时，他被称作是这个类的`伴生对象`：companion object。你必须在同一个源文件里定义类和它的伴生对象。类被称为是这个单例对象的`伴生类`：companion class。类和它的伴生对象可以互相访问其私有成员
+
 ```
 // 私有构造方法
 class Marker private(val color:String) {
@@ -412,13 +444,13 @@ object Marker{
 		println(Marker getMarker "blue")  
     }
 }
-
 创建颜色标记：red
 创建颜色标记：blue
 创建颜色标记：green
 颜色标记：red
 颜色标记：blue
 ```
+
 ### 样例类
 使用了case关键字的类定义就是就是样例类(case classes)，样例类是种特殊的类，经过优化以用于模式匹配。
 
@@ -454,7 +486,6 @@ Scala 提供了强大的模式匹配机制，应用也非常广泛。
 object Test {
    def main(args: Array[String]) {
       println(matchTest(3))
-
    }
    def matchTest(x: Int): String = x match {
       case 1 => "one"
@@ -464,6 +495,7 @@ object Test {
 }
 ```
 match 对应 Java 里的 switch，但是写在选择器表达式之后。即： **选择器 match {备选项}**。
+
 ## 正则表达式
 
 ## 提取器
@@ -471,6 +503,7 @@ match 对应 Java 里的 switch，但是写在选择器表达式之后。即： 
 ## 文件IO
 
 ## 案例
+
 ### 提取器在正则表达式中的运用
 ```
 val pattern = "(\\d+) (\\w+)".r //定义正则
