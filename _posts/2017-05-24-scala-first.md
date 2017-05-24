@@ -293,14 +293,11 @@ object Test {
       println("连接后的字符串为: " + t.toString() )
    }
 }
-//结果:连接后的字符串为: (1,hello,scala.Console$@4dd8dc3)
 ```
 
 ## scala迭代器
 
-**Scala Iterator（迭代器）不是一个集合，它是一种用于访问集合的方法。**
-
-**迭代器 it 的两个基本操作是 next 和 hasNext。**
+**Scala Iterator（迭代器）不是一个集合，它是一种用于访问集合的方法。迭代器 it 的两个基本操作是 next 和 hasNext。**
 
 调用 it.next() 会返回迭代器的下一个元素，并且更新迭代器的状态。
 
