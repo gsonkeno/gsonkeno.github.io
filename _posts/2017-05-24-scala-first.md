@@ -293,6 +293,7 @@ object Test {
       println("连接后的字符串为: " + t.toString() )
    }
 }
+
 ```
 
 ## scala迭代器
@@ -378,6 +379,7 @@ class Location(override val xc: Int, override val yc: Int,
    }
 }
 ```
+
 ### 单例对象
 在 Scala 中，是没有 static 这个东西的，但是它也为我们提供了单例模式的实现方法，那就是使用`关键字 object`。
 Scala 中使用单例模式时，除了定义的类之外，还要定义一个同名的 object 对象，它和类的区别是，object对象不能带参数。
