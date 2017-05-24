@@ -323,7 +323,6 @@ object Test {
 **Scala 的类定义可以有参数，称为类参数,类参数在整个类中都可以访问。**
 ```
 import java.io._
-
 class Point(xc: Int, yc: Int) {
    var x: Int = xc
    var y: Int = yc
@@ -351,6 +350,7 @@ Scala继承一个基类跟Java很相似, 但我们需要注意以下几点：
 - 重写一个非抽象方法必须使用override修饰符。
 - 只有主构造函数才可以往基类的构造函数里写参数。
 - 在子类中重写超类的抽象方法时，你不需要使用override关键字。
+
 ```
 class Point(xc: Int, yc: Int) {
    var x: Int = xc
