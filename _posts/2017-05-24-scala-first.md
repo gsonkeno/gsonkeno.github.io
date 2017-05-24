@@ -293,7 +293,6 @@ object Test {
       println("连接后的字符串为: " + t.toString() )
    }
 }
-
 //结果:连接后的字符串为: (1,hello,scala.Console$@4dd8dc3)
 ```
 
@@ -314,7 +313,6 @@ object Test {
 object Test {
    def main(args: Array[String]) {
       val it = Iterator("Baidu", "Google", "Runoob", "Taobao")
-      
       while (it.hasNext){
          println(it.next())
       }
@@ -344,7 +342,6 @@ class Point(xc: Int, yc: Int) {
 object Test {
    def main(args: Array[String]) {
       val pt = new Point(10, 20);
-
       // 移到一个新的位置
       pt.move(10, 10);
    }
@@ -400,18 +397,14 @@ class Marker private(val color:String) {
 
 // 伴生对象，与类共享名字，可以访问类的私有属性和方法
 object Marker{
-  
     private val markers: Map[String, Marker] = Map(
       "red" -> new Marker("red"),
       "blue" -> new Marker("blue"),
       "green" -> new Marker("green")
     )
-    
     def apply(color:String) = {
       if(markers.contains(color)) markers(color) else null
-    }
-  
-    
+    }    
     def getMarker(color:String) = { 
       if(markers.contains(color)) markers(color) else null
     }
@@ -437,8 +430,7 @@ object Test {
    def main(args: Array[String]) {
    	val alice = new Person("Alice", 25)
 	val bob = new Person("Bob", 32)
-   	val charlie = new Person("Charlie", 32)
-   
+   	val charlie = new Person("Charlie", 32)  
     for (person <- List(alice, bob, charlie)) {
     	person match {
             case Person("Alice", 25) => println("Hi Alice!")
