@@ -25,9 +25,7 @@ Scala程序从main()方法开始处理，这是每一个Scala程序的强制程�
 - 引用
 ```
 import java.awt.Color  // 引入Color
- 
 import java.awt._  // 引入包内所有成员
-
 import java.awt.{Color, Font} //引用包内的几个成员
 ```
 
