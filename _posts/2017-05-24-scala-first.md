@@ -267,7 +267,6 @@ var z = Array("Runoob", "Baidu", "Google")
 元组的值是通过将单个的值包含在圆括号中构成的。例如：
 ```
 val t = (1, 3.14, "Fred")  
-
 val t = (4,3,2,1)
 ```
 
@@ -281,8 +280,7 @@ t._1  //访问元组t的第一个元素
 ```
 object Test {
    def main(args: Array[String]) {
-      val t = (4,3,2,1)
-      
+      val t = (4,3,2,1)     
       t.productIterator.foreach{ i =>println("Value = " + i )}
    }
 }
@@ -292,13 +290,13 @@ object Test {
 object Test {
    def main(args: Array[String]) {
       val t = new Tuple3(1, "hello", Console)
-      
       println("连接后的字符串为: " + t.toString() )
    }
 }
 
 //结果:连接后的字符串为: (1,hello,scala.Console$@4dd8dc3)
 ```
+
 ## scala迭代器
 **Scala Iterator（迭代器）不是一个集合，它是一种用于访问集合的方法。**
 
@@ -322,6 +320,7 @@ object Test {
    }
 }
 ```
+
 ## 类和对象
 **Scala中的类不声明为public，一个Scala源文件中可以有多个类**
 
@@ -350,6 +349,7 @@ object Test {
    }
 }
 ```
+
 ### 继承
 Scala继承一个基类跟Java很相似, 但我们需要注意以下几点：
 
