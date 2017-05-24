@@ -30,6 +30,7 @@ import java.awt._  // 引入包内所有成员
 
 import java.awt.{Color, Font} //引用包内的几个成员
 ```
+
 ## 变量与常量
 - 变量
 声明变量
