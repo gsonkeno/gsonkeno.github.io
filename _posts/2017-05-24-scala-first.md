@@ -32,10 +32,13 @@ import java.awt.{Color, Font} //引用包内的几个成员
 ```
 
 ## 变量与常量
+
 - 变量
 声明变量
->var s : String = "hello"
->var s : String //声明变量不一定需要初始值 
+```
+var s : String = "hello"
+var s : String //声明变量不一定需要初始值 
+```
 
 - 常量
 声明常量
