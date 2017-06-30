@@ -16,7 +16,31 @@ curl可以用来模拟http请求，最初使用到它，就是在学习elasticse
 
 ## 1 新建索引
 ```
-curl -XPUT 'localhost:9200/my_index?pretty&pretty'
+curl -XPUT 'localhost:9200/twitter?pretty&pretty'
+```
+加上分片数目和副本数目(若不加，默认5个分片和1个副本)
+```
+curl -XPUT 'localhost:9200/twitter?pretty' -H 'Content-Type: application/json' -d'
+{
+    "settings" : {
+        "index" : {
+            "number_of_shards" : 3,
+            "number_of_replicas" : 2
+        }
+    }
+}
+'
+```
+简化版
+```
+curl -XPUT 'localhost:9200/twitter?pretty' -H 'Content-Type: application/json' -d'
+{
+    "settings" : {
+        "number_of_shards" : 3,
+        "number_of_replicas" : 2
+    }
+}
+'
 ```
 
 ## 2 创建mapping
