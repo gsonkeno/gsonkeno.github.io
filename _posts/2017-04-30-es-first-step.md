@@ -250,7 +250,22 @@ keyword这种数据类型可以将结构性数据编入索引，比如邮箱地�
 ### 3.1 _all域
 ElasticSearch默认为每个被索引的文档都定义了一个特殊的域 - '_all'，它自动包含被索引文档中一个或者多个域中的内容， 在进行搜索时，如果不指明要搜索的文档的域，ElasticSearch则会去搜索_all域。_all带来搜索方便，其代价是增加了系统在索引阶段对CPU和存储空间资源的开销。
    
-默认情况，ElasticSarch自动使用_all所有的文档的域都会被加到_all中进行索引。可以使用"_all" : {"enabled":false} 开关禁用它。如果某个域不希望被加到_all中，可以使用 "include_in_all":false
+默认情况，ElasticSarch自动使用_all所有的文档的域都会被加到_all中进行索引。可以使用"_all" : {"enabled":false}开关禁用它。如果某个域不希望被加到_all中，可以使用 "include_in_all":false。
+
+在我的工作经验中，曾经需要对多个字段内容进行模糊搜索，当时的处理措施是新建一个字段，用来copy一份多个字段的值，以约定的分隔符分隔，单独对这个字段进行模糊搜索，现在看来，使用_all域或许是一种更为简洁高效的方式，_all域中排除其他不需要混合模糊搜索的字段即可。
+
+需要说明的是_all域将涵盖的字段的值组装成一个大的字符串，以空格分隔，被分词然后被编入索引，但是它是非store的，这将导致_all域内容不会被返回，不过这没有关系，正常情况下你可以从_source域中拿到所有字段的值。
+
+### 3.2 _source域
+source域中存储着原始的json文档，也即以json形式存储着文档中每个普通字段的值，但被`copy_to`指向的字段不会被包含在_source中，具体详见[4.3 copy_to 章节](#copy_to)这个字段本身是未被索引的，即index不为true，所以自然而然是不可用于检索的。但是这并不妨碍它的使用，因为它默认是被`store`的，所以用户执行检索请求时，source字段整个内容是可以被返回的。
+
+官网上有说，可以设置某些字段排除在_source之外，这里不做详细说明，具体可以查看官方文档[Disabling the _source field](https://www.elastic.co/guide/en/elasticsearch/reference/5.3/mapping-source-field.html)，我想说的是，
+
+- 你为什么要把这个字段从_source中移除呢?
+一种常见的原因，是这个普通字段内容太长了，在web页面查询展示结果时并不需要展示这个字段的内容，虽然这个字段的内容可能在其他情况下用到，至少此处不需用到。
+
+-  还能通过别的方式获取这个被移除的字段的值吗?
+能，你需要额外设置这个普通字段的`store`属性值为true,通过后文中的[4.2 store 章节](#store)示范的例子获取字段值，除此之外，暂时别无它法。
 
 
 ## 4 映射参数 Mapping parameters
@@ -260,11 +275,11 @@ ElasticSearch默认为每个被索引的文档都定义了一个特殊的域 - '
 
 `index`选项决定了该字段是否可以支持检索，接受`true`和`false`两个值，没有编入索引的字段是不可以被检索的。对所有类型的字段，默认值是true
 
-特别注意:对于有继承属性的类型`string`,它有`text`和`keyword`连个子类型，当然它们也是会入索引的，但是怎么入索引我们还可以做额外的指定。设置`index:analyzed`表示该字段的值会被分词然后入索引，对于text类型字段的默认处理方式。设置`index:not_analyzed`表示该字段的值不会被分词，直接入索引，是`keyword`类型字段的默认处理方式，如果这个字符串类型字段，根本不想被编入索引，你可以设置`index:no`,这与设置`index:false`等效，不过是针对字符串类型的一种额外设置补充罢了。
+特别注意:对于有继承属性的类型`string`,它有`text`和`keyword`连个子类型，当然它们也是会入索引的，但是怎么入索引我们还可以做额外的指定。设置`index:analyzed`表示该字段的值会被分词然后入索引，是text类型字段的默认处理方式。设置`index:not_analyzed`表示该字段的值不会被分词，直接入索引，是`keyword`类型字段的默认处理方式，如果这个字符串类型字段，根本不想被编入索引，你可以设置`index:no`,这与设置`index:false`等效，不过是针对字符串类型的一种额外设置补充罢了。
 
 使用中，建议你不必设置字段的index属性，它们默认都会编入索引，除非你确定这个字段，使用中不必用来检索。
 
-### 4.2 store
+### 4.2 <span id="store"> store </span>
 默认地，字段的值通过索引`index`而变得可被搜索，但是他们并没有被存储`store`。这意味着这个字段可被搜寻`query`,但是原始值并不会被检索到。
 
 通常情况下，这关系不大。一般字段的值本身就会是 元域 `_source`字段的一部分，这个元域字段默认是被存储`store`的。
@@ -346,9 +361,9 @@ curl -XGET 'localhost:9200/my_index/_search?pretty' -H 'Content-Type: applicatio
   }
 }
 ```
-- 如果一个字段，它的值并不会出现在`_source`字段中(比如`copy_to` fields)
+- 如果一个字段，它的值并不会出现在`_source`字段中(比如`copy_to` fields),那么这个字段设置为store可能是有意义的。
 
-### 4.3 copy_to
+### 4.3 <span id="copy_to">copy_to</span>
 
 这个`copy_to`映射参数允许你创建一个自定义`_all`元域字段，换句话说，就是多个字段的值可以复制一份到一个`组字段`中，这个`组字段`可以被当做一个普通的单个字段进行查询。比如,`姓(first_name)`和`名(last_name)`两个字段可以复制到`姓名(full_name)`字段中。
 ```
@@ -423,8 +438,11 @@ curl -XGET 'localhost:9200/my_index/_search?pretty' -H 'Content-Type: applicatio
 `first name`字段和`last name`字段可以独立地被这两个被这两个字段各自检索。而`full name`字段可以被这两个字段进行检索。
 
 需要注意的几点有:
+
 ①原始的`_source`元域中不会展示复制字段，在本例中即`_source`中不会展示`full_name `字段。
+
 ②一个字段的值可以被复制到多个目标字段中,使用`"copy_to": [ "field_1", "field_2" ]`
+
 
 ### 4.4 include_in_all
 此映射参数 指定该字段是否应该包含在`_all`字段中，默认值为`true`,除非你将`index`映射参数设为`false`
