@@ -9,7 +9,7 @@ author: gaos
 * content
 {:toc}
 
-curl可以用来模拟http请求，最初使用到它，就是在学习elasticsearch的过程中使用curl命令向服务端发送请求。另外google浏览器支持一款curl请求的浏览器插件`sense`,在windows平台下操作比较方便，且有智能提示，比较友好；另外head插件是一款可视化插件，功能也是非常强大。本文只对在elasticsearch中常用的curl命令做个简单笔记积累，使用其他工具稍加修改即可。
+curl可以用来模拟http请求，最初使用到它，就是在学习elasticsearch的过程中使用curl命令向服务端发送请求。另外google浏览器支持一款curl请求的浏览器插件`sense`,在windows平台下操作比较方便，且有智能提示，比较友好；另外head插件是一款可视化插件，功能也是非常强大。本文只对在elasticsearch中常用的curl命令做个简单笔记积累，使用其他工具稍加修改即可,尤其是head插件，head插件的复合菜单选项卡中，可以较好地在windows平台下执行elasticsearch客户端的交互。
 
 
 
@@ -45,7 +45,9 @@ curl -XPUT 'localhost:9200/twitter?pretty' -H 'Content-Type: application/json' -
 
 ## 2 创建mapping
 ### 2.1 方式一
+
 ```
+//该方式下要求索引并未创建，索引与mapping结构一起创建
 curl -XPUT 'localhost:9200/my_index?pretty' -H 'Content-Type:application/json' -d'
 {
   "mappings": {
@@ -65,6 +67,7 @@ curl -XPUT 'localhost:9200/my_index?pretty' -H 'Content-Type:application/json' -
 ```
 ### 2.2 方式二
 ```
+//该方式下要求索引已经创建，但是type和mapping还未创建
 curl -XPOST http://localhost:9200/index/fulltext/_mapping -d'
 {
     "fulltext": {
